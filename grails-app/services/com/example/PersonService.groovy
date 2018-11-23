@@ -5,6 +5,8 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PersonService {
 
+    PetService petService
+
     Person get(Serializable id) {
         Person.get(id)
     }
@@ -22,7 +24,15 @@ class PersonService {
     }
 
     Person save(Person person) {
-        person.save()
+        Person personGuadada
+        log.info("[inicio] PersonService.save()")
+        petService.changeName(person.pets)
+
+        personGuadada = person.save()
+
+        log.info("[fin] PersonService.save()")
+
+        return personGuadada
     }
 
 }

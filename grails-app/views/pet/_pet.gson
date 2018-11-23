@@ -1,0 +1,10 @@
+import com.example.Pet
+
+model {
+	Pet pet
+}
+
+json {
+	id pet.id
+	name pet.name
+}

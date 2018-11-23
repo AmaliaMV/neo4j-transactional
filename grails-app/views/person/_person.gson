@@ -1,7 +1,12 @@
 import com.example.Person
 
 model {
-	Person person
+    Person person
 }
 
-json g.render(person, [resolveTemplate: false])
+json {
+    id person.id
+    name person.name
+    pets g.render(person.pets)
+    car g.render(person.car)
+}

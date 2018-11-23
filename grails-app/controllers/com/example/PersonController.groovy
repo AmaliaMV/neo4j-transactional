@@ -40,6 +40,7 @@ class PersonController {
 
     @Transactional
     def update(Person person) {
+        log.debug('empezando controller')
         if (person == null) {
             render status: NOT_FOUND
             return
@@ -52,6 +53,7 @@ class PersonController {
             return
         }
 
+        log.debug('Mandando respuesta')
         respond person, [status: OK, view:"show"]
     }
 

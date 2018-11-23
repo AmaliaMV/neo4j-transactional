@@ -1,11 +1,13 @@
 package com.example
 
+import grails.compiler.GrailsCompileStatic
 import grails.validation.ValidationException
 
 import static org.springframework.http.HttpStatus.CREATED
 import static org.springframework.http.HttpStatus.NOT_FOUND
 import static org.springframework.http.HttpStatus.OK
 
+@GrailsCompileStatic
 class PersonWithoutTransactionController {
 
     PersonService personService
@@ -15,7 +17,7 @@ class PersonWithoutTransactionController {
 
     def index(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        respond personService.list(params), model:[personCount: personService.count()]
+        respond personService.list(params), model: [personCount: personService.count()]
     }
 
     def show(Long id) {
@@ -30,28 +32,45 @@ class PersonWithoutTransactionController {
 
         try {
             personService.save(person)
-        } catch (ValidationException e) {
-            respond person.errors, view:'create'
+        }
+        catch (ValidationException e) {
+            respond person.errors, view: 'create'
             return
         }
 
-        respond person, [status: CREATED, view:"show"]
+        respond person, [status: CREATED, view: "show"]
     }
 
-    def update(Person person) {
+    def update() {
+        log.debug('empezando controller')
+
+        log.debug('[INICIO] - get person')
+        Person person = personService.get(params.id as Serializable)
+        log.debug('[FIN] - get person')
+
         if (person == null) {
             render status: NOT_FOUND
             return
         }
 
+        log.debug('[INICIO] - binding')
+        BindingHelper.withNoAutoFlush {
+            person.setProperties(getObjectToBind())
+        }
+        log.debug('[FIN] - binding')
+
         try {
+            log.debug('[INICIO] - save')
             personService.save(person)
-        } catch (ValidationException e) {
-            respond person.errors, view:'edit'
+            log.debug('[FIN] - save')
+        }
+        catch (ValidationException e) {
+            respond person.errors, view: 'edit'
             return
         }
 
-        respond person, [status: OK, view:"show"]
+        log.debug('mandando respuesta')
+        respond person, [status: OK, view: "show"]
     }
 
     def delete(Long id) {
@@ -62,6 +81,10 @@ class PersonWithoutTransactionController {
 
         personService.delete(id)
 
-        respond ([status: OK], [message: 'Object deleted'])
+        respond([status: OK], [message: 'Object deleted'])
+    }
+
+    protected getObjectToBind() {
+        request
     }
 }

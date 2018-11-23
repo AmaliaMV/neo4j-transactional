@@ -34,3 +34,9 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
 }
 root(ERROR, ['STDOUT'])
+
+
+logger 'org.grails.datastore.gorm.neo4j.Neo4jSession', DEBUG, ['STDOUT'], false
+logger 'org.grails.datastore.gorm.neo4j.Neo4jTransaction', DEBUG
+logger 'org.grails.datastore.gorm.neo4j.engine.Neo4jEntityPersister', DEBUG
+logger 'com.example', DEBUG
