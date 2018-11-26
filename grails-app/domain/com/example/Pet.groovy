@@ -7,10 +7,6 @@ class Pet {
 
     User createdBy
 
-    static transients = ['aa']
-
-    A aa
-
     String name
 
     static belongsTo = [owner: Person]
@@ -26,6 +22,6 @@ class Pet {
 
     void afterLoad() {
         log.info("Pet - afterLoad()")
-        aa = A.findByName('A')
+        A.findByName('A')
     }
 }
