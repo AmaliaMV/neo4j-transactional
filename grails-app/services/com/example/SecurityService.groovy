@@ -9,9 +9,9 @@ class SecurityService {
 
     @Transactional(readOnly = true)
     User getCurrentUser() {
-        log.info("[inicio] SecurityService.getCurrentUser()")
+        log.debug("[START] SecurityService.getCurrentUser()")
         User user = User.findByName('admin')
-        log.info("[fin] SecurityService.getCurrentUser()")
-        return
+        log.info("[END] SecurityService.getCurrentUser()")
+        return user
     }
 }

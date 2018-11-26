@@ -4,9 +4,12 @@ model {
     Person person
 }
 
+log.info("[START] person render")
+
 json {
     id person.id
     name person.name
     pets g.render(person.pets)
-    car g.render(person.car)
 }
+
+log.info("[END] person render")

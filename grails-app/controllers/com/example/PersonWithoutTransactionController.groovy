@@ -42,11 +42,11 @@ class PersonWithoutTransactionController {
     }
 
     def update() {
-        log.debug('empezando controller')
+        log.debug('[START] update action')
 
-        log.debug('[INICIO] - get person')
+        log.debug('[INICIO] - personService.get()')
         Person person = personService.get(params.id as Serializable)
-        log.debug('[FIN] - get person')
+        log.debug('[FIN] - personService.get()')
 
         if (person == null) {
             render status: NOT_FOUND
@@ -54,22 +54,20 @@ class PersonWithoutTransactionController {
         }
 
         log.debug('[INICIO] - binding')
-        BindingHelper.withNoAutoFlush {
-            person.setProperties(getObjectToBind())
-        }
+        person.setProperties(getObjectToBind())
         log.debug('[FIN] - binding')
 
         try {
-            log.debug('[INICIO] - save')
+            log.debug('[INICIO] - personService.save()')
             personService.save(person)
-            log.debug('[FIN] - save')
+            log.debug('[FIN] - personService.save()')
         }
         catch (ValidationException e) {
             respond person.errors, view: 'edit'
             return
         }
 
-        log.debug('mandando respuesta')
+        log.debug('[END] update action')
         respond person, [status: OK, view: "show"]
     }
 

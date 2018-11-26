@@ -23,10 +23,9 @@ class Pet {
     void beforeInsert() {
         log.info("Pet - beforeInsert()")
     }
-    
+
     void afterLoad() {
-        BindingHelper.withNoAutoFlush {
-            aa = A.findByName('A')
-        }
+        log.info("Pet - afterLoad()")
+        aa = A.findByName('A')
     }
 }

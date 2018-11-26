@@ -40,3 +40,4 @@ logger 'org.grails.datastore.gorm.neo4j.Neo4jSession', DEBUG, ['STDOUT'], false
 logger 'org.grails.datastore.gorm.neo4j.Neo4jTransaction', DEBUG
 logger 'org.grails.datastore.gorm.neo4j.engine.Neo4jEntityPersister', DEBUG
 logger 'com.example', DEBUG
+logger 'grails.views', DEBUG

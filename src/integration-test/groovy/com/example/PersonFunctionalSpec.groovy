@@ -3,6 +3,7 @@ package com.example
 import grails.testing.mixin.integration.Integration
 import grails.transaction.Rollback
 
+
 import static org.springframework.http.HttpStatus.*
 import geb.spock.*
 import grails.plugins.rest.client.RestBuilder
@@ -16,27 +17,32 @@ class PersonFunctionalSpec extends GebSpec {
     }
 
     void setup() {
-        if (!Person.findByName('Tomy')) {
-            new Person(name: 'Tomy').save(flush:true, failOnError:true)
-        }
+        A a = new A(name: 'A').save(flush: true, failOnError: true)
+        Pet pet1 = new Pet(name: 'Pet 1')
+
+        new Person(name: 'Person 1')
+            .addToPets(pet1)
+            .save(flush: true, failOnError: true)
+
     }
 
-    void "Test the delete action with Transaction Notation"() {
+    void "Test update action without Transaction Notation"() {
         when:
-        def id = Person.findByName('Tomy').id
-        def response = restBuilder.delete("${baseUrl}/person/$id")
+        println "\n[START] test\n"
+        def id = Person.findByName('Person 1').id
+        def response = restBuilder.put("${baseUrl}/personWithoutTransaction/$id", {
+            json([
+                pets: [
+                    [
+                        name: "Pet 2"
+                    ]
+                ]
+            ])
+        })
 
-        then:"you should have an error"
-        response.status == INTERNAL_SERVER_ERROR.value() // <-- this fail
+        then: "you should have save it"
+        response.status == OK.value()  // <-- this fail
+        response.json.pets.size() == 1
     }
 
-
-    void "Test the delete action without Transaction Notation"() {
-        when:
-        def id = Person.findByName('Tomy').id
-        def response = restBuilder.delete("${baseUrl}/personWithoutTransaction/$id")
-
-        then:"you should have an error"
-        response.status == INTERNAL_SERVER_ERROR.value()
-    }
 }
