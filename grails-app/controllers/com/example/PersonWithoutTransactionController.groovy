@@ -44,23 +44,23 @@ class PersonWithoutTransactionController {
     def update() {
         log.debug('[START] update action')
 
-        log.debug('[INICIO] - personService.get()')
+        log.debug('[START] - personService.get()')
         Person person = personService.get(params.id as Serializable)
-        log.debug('[FIN] - personService.get()')
+        log.debug('[END] - personService.get()')
 
         if (person == null) {
             render status: NOT_FOUND
             return
         }
 
-        log.debug('[INICIO] - binding')
+        log.debug('[START] - binding')
         person.setProperties(getObjectToBind())
-        log.debug('[FIN] - binding')
+        log.debug('[END] - binding')
 
         try {
-            log.debug('[INICIO] - personService.save()')
+            log.debug('[START] - personService.save()')
             personService.save(person)
-            log.debug('[FIN] - personService.save()')
+            log.debug('[END] - personService.save()')
         }
         catch (ValidationException e) {
             respond person.errors, view: 'edit'
